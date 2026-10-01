@@ -193,4 +193,23 @@ export const PDF_TOOLS: ToolItem[] = [
     iconColor: "text-amber-500",
     iconBg: "bg-amber-50",
   },
+  {
+    id: "extract-images",
+    title: "Extract Images",
+    description: "Extract images from PDF files",
+    href: "/extract-images",
+    icon: Images,
+    iconColor: "text-blue-500",
+    iconBg: "bg-blue-50",
+  },
+  {
+    id: "pdf-to-images-zip",
+    title: "PDF to Images (ZIP)",
+    description: "Convert all PDF pages to images (ZIP)",
+    href: "/pdf-to-images-zip",
+    icon: FolderArchive,
+    iconColor: "text-emerald-600",
+    iconBg: "bg-emerald-50",
+  },
 ];
+

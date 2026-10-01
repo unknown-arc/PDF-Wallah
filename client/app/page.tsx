@@ -1,15 +1,13 @@
-import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ToolsGrid from '@/components/ToolsGrid';
+import TrustBar from '@/components/TrustBar';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white font-sans">
-      <Navbar />
-      <main>
-        <Hero />
-        <ToolsGrid />
-      </main>
-    </div>
+    <main className="font-sans w-full">
+      <Hero />
+      <ToolsGrid />
+      <TrustBar />
+    </main>
   );
 }
