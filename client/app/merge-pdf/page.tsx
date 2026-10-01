@@ -104,7 +104,7 @@ export default function MergePDFPage() {
       const mergedPdfBytes = await mergedPdf.save();
 
       // 4. Create a Blob and URL for downloading
-      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([new Uint8Array(mergedPdfBytes)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
 
       setMergedPdfUrl(url);
