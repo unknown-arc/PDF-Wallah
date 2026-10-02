@@ -2,7 +2,11 @@ venv/
 __pycache__/
 *.pyc
 .env
+
 temp/uploads/*
 temp/outputs/*
+
 .pytest_cache/
+
 setup.bat
+API_DOCUMENTATION.md
