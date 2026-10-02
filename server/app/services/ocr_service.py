@@ -1,7 +1,15 @@
 from pathlib import Path
 import pymupdf
-import pytesseract
-from PIL import Image
+
+try:
+    import pytesseract  # type: ignore
+except ImportError:  
+    pytesseract = None
+
+try:
+    from PIL import Image  # type: ignore
+except ImportError:  
+    Image = None
 
 OCR_SETTINGS = {
     'low': {'dpi': 140, 'psm': 6},
@@ -10,6 +18,9 @@ OCR_SETTINGS = {
 }
 
 def process_ocr(input_path: Path, output_path: Path, level: str):
+    if Image is None or pytesseract is None:
+        raise RuntimeError('OCR dependencies are not installed. Please install Pillow and pytesseract.')
+
     s = OCR_SETTINGS[level]
     source = pymupdf.open(input_path)
     output = pymupdf.open()
@@ -21,7 +32,8 @@ def process_ocr(input_path: Path, output_path: Path, level: str):
             data = pytesseract.image_to_data(image, config=f"--psm {s['psm']}",
                                              output_type=pytesseract.Output.DICT)
             new_page = output.new_page(width=page.rect.width, height=page.rect.height)
-            new_page.show_pdf_page(new_page.rect, source, page.number)
+            page_number = page.number if page.number is not None else 0
+            new_page.show_pdf_page(new_page.rect, source, int(page_number))
             sx, sy = page.rect.width / pix.width, page.rect.height / pix.height
             for i, raw in enumerate(data['text']):
                 text = raw.strip()

@@ -1,7 +1,10 @@
 from pathlib import Path
 import zipfile
 import pymupdf
-from PIL import Image
+try:
+    from PIL import Image  # type: ignore
+except ImportError:
+    Image = None
 
 def convert_pdf(input_path: Path, output_base: Path, output_format: str) -> Path:
     source = pymupdf.open(input_path)
@@ -17,7 +20,7 @@ def convert_pdf(input_path: Path, output_base: Path, output_format: str) -> Path
         result = output_base.with_suffix('.zip')
         ext = 'jpg' if output_format in {'jpg', 'jpeg'} else 'png'
         with zipfile.ZipFile(result, 'w', zipfile.ZIP_DEFLATED) as zf:
-            for index, page in enumerate(source):
+            for index, page in enumerate(source.pages()):
                 pix = page.get_pixmap(dpi=150, alpha=False)
                 zf.writestr(f'page_{index + 1}.{ext}', pix.tobytes(ext))
         return result
@@ -26,6 +29,8 @@ def convert_pdf(input_path: Path, output_base: Path, output_format: str) -> Path
 
 def convert_to_pdf(input_path: Path, output_path: Path, extension: str):
     if extension in {'png', 'jpg', 'jpeg'}:
+        if Image is None:
+            raise RuntimeError('Pillow is required to convert images to PDF')
         with Image.open(input_path) as image:
             image.convert('RGB').save(output_path, 'PDF', resolution=150.0)
         return

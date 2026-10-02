@@ -5,3 +5,4 @@ __pycache__/
 temp/uploads/*
 temp/outputs/*
 .pytest_cache/
+setup.bat

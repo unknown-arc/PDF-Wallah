@@ -38,14 +38,14 @@ def compress_pdf(input_path: Path, output_path: Path, mode: str, target_mb: floa
 
     settings = SETTINGS['mid' if mode == 'custom' else mode]
     if mode == 'custom':
-        target = target_mb * 1024 * 1024
+        target = int((target_mb or 1) * 1024 * 1024)
         ratio = target / max(original_size, 1)
         settings = SETTINGS['low'] if ratio > .75 else SETTINGS['mid'] if ratio > .45 else SETTINGS['high']
 
     _raster_compress(input_path, output_path, settings['dpi'], settings['quality'])
 
     if mode == 'custom':
-        target = int(target_mb * 1024 * 1024)
+        target = int((target_mb or 1) * 1024 * 1024)
         for setting in (SETTINGS['mid'], SETTINGS['high'], {'dpi': 72, 'quality': 40}):
             if output_path.stat().st_size <= target:
                 break
