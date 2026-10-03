@@ -11,8 +11,9 @@ app.include_router(conversion_router, prefix='/api')
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://pdf-wallah-murex.vercel.app/",
-                   "http://127.0.0.1/"],
+    allow_origins=["https://pdf-wallah-murex.vercel.app",
+                   "http://127.0.0.1/",
+                   "http://localhost:3000",],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
