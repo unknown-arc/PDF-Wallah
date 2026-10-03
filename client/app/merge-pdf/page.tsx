@@ -9,7 +9,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { PDFDocument } from 'pdf-lib';
 
-// Import Reusable Components
 import ProcessingState from '@/components/pdf-tools/ProcessingState';
 import SuccessState from '@/components/pdf-tools/SuccessState';
 import ErrorState from '@/components/pdf-tools/ErrorState';
@@ -20,19 +19,17 @@ export default function MergePDFPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [toolState, setToolState] = useState<ToolState>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [mergedPdfUrl, setMergedPdfUrl] = useState<string | null>(null); // Store the final blob URL
-  
+  const [mergedPdfUrl, setMergedPdfUrl] = useState<string | null>(null);
+
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Cleanup object URLs to prevent memory leaks when component unmounts
   useEffect(() => {
     return () => {
       if (mergedPdfUrl) URL.revokeObjectURL(mergedPdfUrl);
     };
   }, [mergedPdfUrl]);
 
-  // --- Handlers for File Selection & Drag-Drop ---
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files).filter(file => file.type === 'application/pdf');
@@ -75,35 +72,26 @@ export default function MergePDFPage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  // --- Actual PDF-Lib Merge Logic ---
   const handleMergeAction = async () => {
     if (files.length < 2) return;
-    
+
     setToolState('processing');
 
     try {
-      // 1. Create a new empty PDF document
       const mergedPdf = await PDFDocument.create();
 
-      // 2. Loop through all selected files in the current order
       for (const file of files) {
-        // Read file as ArrayBuffer
         const arrayBuffer = await file.arrayBuffer();
-        
-        // Load the PDF document
+
         const pdf = await PDFDocument.load(arrayBuffer);
-        
-        // Copy all pages from this PDF
+
         const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        
-        // Add them to our merged document
+
         copiedPages.forEach((page) => mergedPdf.addPage(page));
       }
 
-      // 3. Save the merged PDF as a Uint8Array
       const mergedPdfBytes = await mergedPdf.save();
 
-      // 4. Create a Blob and URL for downloading
       const blob = new Blob([new Uint8Array(mergedPdfBytes)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
 
@@ -119,7 +107,6 @@ export default function MergePDFPage() {
   const downloadMergedPDF = () => {
     if (!mergedPdfUrl) return;
     
-    // Create a temporary link element to trigger the download
     const link = document.createElement('a');
     link.href = mergedPdfUrl;
     link.download = 'Merged_Document_PDFWallah.pdf';
@@ -129,14 +116,13 @@ export default function MergePDFPage() {
   };
 
   const resetTool = () => {
-    if (mergedPdfUrl) URL.revokeObjectURL(mergedPdfUrl); // Free up memory
+    if (mergedPdfUrl) URL.revokeObjectURL(mergedPdfUrl);
     setFiles([]);
     setMergedPdfUrl(null);
     setErrorMessage('');
     setToolState('idle');
   };
 
-  // --- Render Workspace ---
   const renderWorkspace = () => {
     if (files.length === 0) {
       return (
