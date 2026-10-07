@@ -9,3 +9,4 @@ temp/outputs/*
 .pytest_cache/
 
 setup.bat
+API_DOCUMENTATION.md

@@ -1,11 +1,10 @@
 venv/
+.venv/
 __pycache__/
 *.pyc
+.pytest_cache/
 .env
-
+.git/
+.github/
 temp/uploads/*
 temp/outputs/*
-
-.pytest_cache/
-
-setup.bat
