@@ -25,3 +25,4 @@ async def compression(file: UploadFile = File(...), mode: str = Form('mid'), tar
     except Exception as exc:
         cleanup_file(input_path, output_path)
         raise HTTPException(status_code=500, detail=f'Compression failed: {exc}')
+
