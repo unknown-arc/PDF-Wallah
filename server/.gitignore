@@ -2,6 +2,7 @@ venv/
 __pycache__/
 *.pyc
 .env
+.env.example
 
 temp/uploads/*
 temp/outputs/*
@@ -9,3 +10,8 @@ temp/outputs/*
 .pytest_cache/
 
 setup.bat
+
+server_new/
+server_old/
+server_new.zip
+server_old.zip
